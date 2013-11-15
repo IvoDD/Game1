@@ -1,0 +1,85 @@
+<html>
+	<head>
+		<title>experiments</title>
+	</haed>
+	<body>
+		<canvas onmousemove="changecoords(event)" id="can" width="1000" height="500" style="border:3px solid #000000;">
+		</canvas>
+		<button type="button" onclick="newGame()">New Game</button>
+		<script>
+			var myInterval=setInterval(function(){render()},1);
+			var c=document.getElementById("can");
+			var ct=c.getContext("2d");
+			var lives=10,broi=0,points=0;
+			var liv="lives:",poi="points:";
+			var bx=500,by=250,bxc=0,byc=0,br=10;
+			var pad1x=50,pad1y=10,pad1sy=200,pad1sx=5;
+			var pad4x=950,pad4y=10,pad4sy=200,pad4sx=5;
+			var pad2x=10,pad2y=50,pad2sx=400,pad2sy=5;
+			var pad3x=10,pad3y=450,pad3sx=400,pad3sy=5;
+			var tekx=100,teky=100,tx,ty;
+			function render(){
+				pad1y=teky-pad1sy/2;pad4y=teky-pad4sy/2;pad2x=tekx-pad2sx/2;pad3x=tekx-pad3sx/2;
+				ct.fillStyle="#3399FF";
+				ct.fillRect(0,0,1000,500);
+				ct.fillStyle="#000000";
+				ct.beginPath();
+				ct.arc(bx,by,br,0,6.283185307179586476925286766559);
+				ct.fillStyle="#000000";
+				ct.fill();
+				ct.stroke();
+				ct.fillStyle="#FF0000";
+				ct.fillRect(pad1x,pad1y,pad1sx,pad1sy);
+				ct.fillRect(pad4x,pad4y,pad4sx,pad4sy);
+				ct.fillRect(pad2x,pad2y,pad2sx,pad2sy);
+				ct.fillRect(pad3x,pad3y,pad3sx,pad3sy);
+				ct.fillStyle="#000000";
+				ct.font="30px Arial";
+				ct.fillText(liv+lives,450,40);
+				ct.fillText(poi+points,450,480);
+				ct.fillStyle="#00FF00";
+				ct.fillRect(450,0,100,5);
+				ct.fillRect(450,495,100,5);
+				ct.fillRect(0,225,5,50);
+				ct.fillRect(995,225,5,50);
+				if (bx-br<=0||bx+br>=1000){
+					bxc*=-1;
+					if (by<=275&&by>=225){
+						lives+=1;
+						points+=9;
+					}
+					points+=1;
+				}
+				if (by-br<=0||by+br>=500){
+					byc*=-1;
+					if (bx<=550&&bx>=450){
+						lives+=1;
+						points+=9;
+					}
+					points+=1;
+				}
+				if (bx-br<=pad1x+pad1sx&&bx+br>=pad1x&&by+br>=pad1y&&by-br<=pad1y+pad1sy){bxc*=-1;--lives;}
+				if (bx-br<=pad4x+pad4sx&&bx+br>=pad4x&&by+br>=pad4y&&by-br<=pad4y+pad4sy){bxc*=-1;--lives;}
+				if (by-br<=pad2y+pad2sy&&by+br>=pad2y&&bx+br>=pad2x&&bx-br<=pad2x+pad2sx){byc*=-1;--lives;}
+				if (by-br<=pad3y+pad3sy&&by+br>=pad3y&&bx+br>=pad3x&&bx-br<=pad3x+pad3sx){byc*=-1;--lives;}
+				bx+=bxc;by+=byc;
+				if (broi<10000){++broi;}
+				if (broi==200){bxc=1;byc=1;}
+				if (broi%1000==0){bxc*=2;byc*=2;}
+				if (lives<0){clearInterval(myInterval);}
+			}
+			function changecoords(event){
+				tx=event.clientX;
+				ty=event.clientY;
+				if (tx<=900&&tx>=100){tekx=tx;}
+				if (ty<=450&&ty>=50){teky=ty;}
+			}
+			function newGame(){
+				clearInterval(myInterval);
+				broi=0;lives=10;points=0;bx=500;by=250;bxc=0;byc=0;
+				myInterval=setInterval(function(){render()},1);
+			}
+			//this is a game by IvoDD
+		</script>
+	</body>
+</html>
